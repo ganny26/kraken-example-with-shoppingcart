@@ -1,45 +1,32 @@
 {
-
-    "express": {
-        "view cache": false,
-        "view engine": "dust",
-        "views": "path:./public/templates"
-    },
-
-    "view engines": {
-        "dust": {
-            "module": "makara",
-            "renderer": {
-                "method": "dust",
-                "arguments": [
-                    { "cache": false, "helpers": "config:dust.helpers" }
-                ]
-            }
-        }
-    },
     "middleware": {
-
         "devtools": {
             "enabled": true,
             "priority": 35,
             "module": {
-                "name": "kraken-devtools",
+                "name": "construx",
                 "arguments": [
                     "path:./public",
                     "path:./.build",
                     {
-                        "dust": {
-                            "module": "kraken-devtools/plugins/dustjs",
-                            "files": "/templates/**/*.js",
-                            "base": "templates",
-                            "i18n": "config:i18n"
+                        "browserify": {
+                            "module": "construx-browserify",
+                            "files": "**/*.js",
+                            "bundles": {
+                                "/bundle.js": {
+                                    "src": "path:./public/main.js",
+                                    "options": {
+                                        "transform": ["reactify", "require-globify"]
+                                    }
+                                }
+                            }
                         },
-                        "less": {
-                            "module": "kraken-devtools/plugins/less",
+                        "css": {
+                            "module": "construx-less",
                             "files": "/css/**/*.css"
                         },
                         "copier": {
-                            "module": "kraken-devtools/plugins/copier",
+                            "module": "construx-copier",
                             "files": "**/*"
                         }
                     }

@@ -1,38 +1,28 @@
 {
     "express": {
+        "view engine": "jsx",
+        "view": "require:anemone-machina/lib/expressView",
         "view cache": false,
-        "view engine": "dust",
-        "views": "path:./public/templates"
+        "views": "path:./public/views"
     },
-
     "view engines": {
-        "dust": {
-            "module": "makara",
+        "jsx": {
+            "module": "anemone-machina/lib/server",
             "renderer": {
-                "method": "dust",
+                "method": "create",
                 "arguments": [
-                    { "cache": true, "helpers": "config:dust.helpers" }
+                    {
+                        "routes": "require:./routes.jsx",
+                        "routesFilePath": "path:./routes.jsx"
+                    }
                 ]
             }
         }
     },
-    "dust": {
-        "helpers": [
-
-            "dust-makara-helpers"
-
-        ]
-    },
-    "bundle engine": "dust",
     "i18n": {
         "contentPath": "path:./locales",
         "fallback": "en-US"
     },
-    "databaseConfig": {
-        "host": "localhost",
-        "database": "shocart"
-    },
-
     "paypalConfig": {
         "host": "api.sandbox.paypal.com",
         "port": "",
@@ -40,37 +30,20 @@
         "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM"
     },
     "middleware": {
-
         "static": {
             "module": {
-                "arguments": [ "path:./.build" ]
+                "arguments": [
+                    "path:./.build"
+                ]
             }
         },
-
-        "router": {
-            "module": {
-                "arguments": [{ "directory": "path:./controllers" }]
-            }
-        },
-
-        "fileNotFound": {
+        "methodOverride": {
+            "priority": 90,
             "enabled": true,
-            "priority": 130,
             "module": {
-                "name": "kraken-js/middleware/404",
-                "arguments": [ "errors/404" ]
+                "name": "path:./lib/methodOverride"
             }
         },
-
-        "serverError": {
-            "enabled": true,
-            "priority": 140,
-            "module": {
-                "name" : "kraken-js/middleware/500",
-                "arguments": [ "errors/500" ]
-            }
-        },
-
         "locale": {
             "priority": 95,
             "enabled": true,
@@ -78,20 +51,18 @@
                 "name": "path:./lib/locale"
             }
         },
-
-
-        "makara": {
+        "reactContentLoader": {
             "priority": 100,
             "enabled": true,
             "module": {
-                "name": "makara",
-                "arguments": [ {
-                    "i18n": "config:i18n"
-                } ]
-
+                "name": "anemone-lingua",
+                "arguments": [
+                    {
+                        "contentPath": "path:./locales",
+                        "fallback": "en-US"
+                    }
+                ]
             }
         }
-
     }
-
 }
